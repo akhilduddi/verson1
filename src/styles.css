@@ -1,0 +1,180 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-glass:
+    0 1px 0 0 rgba(255, 255, 255, 0.6) inset, 0 10px 40px -10px rgba(37, 99, 235, 0.18);
+  --shadow-elevate: 0 30px 80px -30px rgba(15, 23, 42, 0.25);
+  --gradient-brand: linear-gradient(
+    135deg,
+    oklch(0.55 0.22 264) 0%,
+    oklch(0.5 0.22 280) 50%,
+    oklch(0.72 0.14 210) 100%
+  );
+  --gradient-soft: linear-gradient(
+    180deg,
+    rgba(37, 99, 235, 0.06),
+    rgba(6, 182, 212, 0.04) 50%,
+    transparent 100%
+  );
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #0F172A;
+
+  --card: #ffffff;
+  --card-foreground: #0F172A;
+  --popover: #ffffff;
+  --popover-foreground: #0F172A;
+
+  --primary: #375be0;
+  --primary-foreground: #ffffff;
+
+  --secondary: #453da0;
+  --secondary-foreground: #ffffff;
+
+  --accent: #1d9e75;
+  --accent-foreground: #ffffff;
+
+  --muted: #F8FAFC;
+  --muted-foreground: #475569;
+
+  --destructive: #ef9f27;
+  --destructive-foreground: #ffffff;
+  --border: #eeedfe;
+  --input: #eeedfe;
+  --ring: #375be0;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility glass-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: var(--shadow-glass);
+}
+
+@utility text-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility bg-soft-radial {
+  background:
+    radial-gradient(60% 50% at 20% 0%, rgba(37, 99, 235, 0.1), transparent 60%),
+    radial-gradient(50% 40% at 90% 10%, rgba(6, 182, 212, 0.1), transparent 60%),
+    radial-gradient(40% 30% at 50% 100%, rgba(79, 70, 229, 0.08), transparent 60%);
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-24px) translateX(8px);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@utility animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+@utility animate-pulse-ring {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+@utility animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 12s ease infinite;
+}
