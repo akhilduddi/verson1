@@ -41,6 +41,7 @@ import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
 import { ProjectCard } from "@/components/ui/project-card";
 import ctaBg from "@/assets/cta-background.png";
 import logo2Img from "@/assets/logo2.png";
+import { CursorTrail } from "@/components/site/CursorTrail";
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -85,7 +86,8 @@ function Hero() {
   const scaleText = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
   return (
-    <section ref={ref} className="relative overflow-hidden">
+    <section ref={ref} className="relative overflow-hidden has-local-trail">
+      <CursorTrail marginsOnly={false} />
       {/* gradient + grid background */}
       <motion.div style={{ y: yBg }} className="absolute inset-0 -z-10 bg-soft-radial" />
       <motion.div style={{ y: yBg }} className="bg-grid absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(70%_55%_at_50%_30%,black,transparent)]" />

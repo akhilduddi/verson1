@@ -14,7 +14,7 @@ const SHOWCASE_DATA = [
   { title: "cGxP Jobs", desc: "Data Scientist Role" },
 ];
 
-export function CursorTrail() {
+export function CursorTrail({ marginsOnly = false }: { marginsOnly?: boolean }) {
   const [trailCards, setTrailCards] = useState<any[]>([]);
   const lastSpawn = useRef({ x: 0, y: 0 });
   const cardIdCounter = useRef(0);
@@ -25,13 +25,22 @@ export function CursorTrail() {
     if (!parent) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // 1. Check if cursor is in the left/right margins of the viewport (outside 1240px content width)
-      const contentWidth = 1240;
-      const marginWidth = Math.max(24, (window.innerWidth - contentWidth) / 2);
-      const isOverMargin = e.clientX < marginWidth || e.clientX > window.innerWidth - marginWidth;
+      const target = e.target as HTMLElement;
 
-      if (!isOverMargin) {
+      // Skip global layout trail if hovering over a container with its own local trail configured
+      if (marginsOnly && target.closest(".has-local-trail")) {
         return;
+      }
+
+      // 1. Check if cursor is in the left/right margins of the viewport (outside 1240px content width)
+      if (marginsOnly) {
+        const contentWidth = 1240;
+        const marginWidth = Math.max(24, (window.innerWidth - contentWidth) / 2);
+        const isOverMargin = e.clientX < marginWidth || e.clientX > window.innerWidth - marginWidth;
+
+        if (!isOverMargin) {
+          return;
+        }
       }
 
       // 2. Check if cursor is vertically within the boundaries of this section
@@ -86,7 +95,7 @@ export function CursorTrail() {
   return (
     <div 
       ref={selfRef} 
-      className="absolute inset-0 pointer-events-none z-10 overflow-hidden"
+      className="absolute inset-0 pointer-events-none z-50 overflow-hidden"
     >
       <AnimatePresence>
         {trailCards.map((c) => (

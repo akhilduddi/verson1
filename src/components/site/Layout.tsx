@@ -8,7 +8,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background relative overflow-x-hidden">
       <Navbar />
-      <CursorTrail />
+      <CursorTrail marginsOnly={true} />
       <main className="flex-1">{children}</main>
       <Footer />
       <BackToTop />

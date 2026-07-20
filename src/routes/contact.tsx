@@ -18,7 +18,7 @@ function Contact() {
     setResult("");
 
     const formData = new FormData(e.currentTarget);
-    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "7a678625-4424-4938-bdb9-df52a9109701";
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
     formData.append("access_key", accessKey);
 
     try {
