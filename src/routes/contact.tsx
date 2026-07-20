@@ -3,11 +3,49 @@ import { SiteLayout } from "@/components/site/Layout";
 import { PageHero, Section, Reveal } from "@/components/site/primitives";
 import { Mail, MapPin, Phone, ArrowRight, CheckCircle2, Globe2, Building, MessageSquare, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CursorTrail } from "@/components/site/CursorTrail";
 
 export default Contact;
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState("");
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setResult("");
+
+    const formData = new FormData(e.currentTarget);
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "7a678625-4424-4938-bdb9-df52a9109701";
+    formData.append("access_key", accessKey);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setSent(true);
+        setResult("Success!");
+        e.currentTarget.reset();
+        setTimeout(() => {
+          setSent(false);
+          setResult("");
+        }, 5000);
+      } else {
+        setResult(data.message || "Error submitting form");
+      }
+    } catch (error) {
+      setResult("Network error, please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <SiteLayout>
       <PageHero
@@ -16,7 +54,7 @@ function Contact() {
         blurb="Tell us about your goals and our team will reach out within one business day."
       />
       <Section className="!pt-12">
-        <div className="grid gap-16 lg:grid-cols-2 items-start">
+        <div className="grid gap-16 lg:grid-cols-2 items-start relative z-10">
           {/* LEFT SIDE: Info & FAQs */}
           <div className="space-y-16">
             <Reveal>
@@ -70,8 +108,8 @@ function Contact() {
                 
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
-                    { city: "New York/New Jersey", region: "HQ - North America", desc: "285 Durham Ave, South Plainfield, NJ 07080." },
-                    { city: "Hyderabad", region: "HQ - India", desc: "Madhapur, Hyderabad, TS, India 500081." },
+                    { city: "New York/New Jersey", region: "HQ - North America", desc: "285 Durham Ave,\nSouth Plainfield, NJ 07080." },
+                    { city: "Hyderabad", region: "HQ - India", desc: "Madhapur, Hyderabad,\nTS, India 500081." },
                   ].map((office) => (
                     <div key={office.city} className="p-4 rounded-xl border border-border bg-background">
                       <div className="flex items-start gap-2">
@@ -79,7 +117,7 @@ function Contact() {
                         <div>
                           <div className="font-semibold text-sm">{office.city}</div>
                           <div className="text-[10px] uppercase tracking-wider text-primary mt-1">{office.region}</div>
-                          <div className="text-xs text-muted-foreground mt-2">{office.desc}</div>
+                          <div className="text-xs text-muted-foreground mt-2 whitespace-pre-line">{office.desc}</div>
                         </div>
                       </div>
                     </div>
@@ -119,10 +157,7 @@ function Contact() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-br from-primary/20 via-accent/10 to-transparent blur-[80px] rounded-[4rem] -z-10 pointer-events-none mix-blend-multiply" />
                 
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setSent(true);
-                  }}
+                  onSubmit={onSubmit}
                   className="space-y-6 rounded-[2rem] border border-white/20 bg-white/60 backdrop-blur-2xl p-8 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-white/20 pointer-events-none" />
@@ -154,7 +189,6 @@ function Contact() {
                         <label className="absolute left-4 top-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold transition-colors peer-focus:text-blue-600">
                           Industry
                         </label>
-                        {/* Custom arrow for select */}
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                         </div>
@@ -181,12 +215,28 @@ function Contact() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type="submit"
-                        className="w-full group inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-semibold text-white transition-all shadow-[0_10px_30px_-12px_rgba(37,99,235,0.45)] hover:bg-blue-700 hover:shadow-[0_18px_40px_-12px_rgba(37,99,235,0.65)]"
+                        disabled={loading || sent}
+                        className="w-full group inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-semibold text-white transition-all shadow-[0_10px_30px_-12px_rgba(37,99,235,0.45)] hover:bg-blue-700 hover:shadow-[0_18px_40px_-12px_rgba(37,99,235,0.65)] disabled:opacity-50"
                       >
-                        {sent ? "Message sent successfully!" : "Send message"}
-                        {!sent && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                        {loading ? (
+                          <span className="flex items-center gap-2">
+                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Sending...
+                          </span>
+                        ) : sent ? (
+                          "Message sent successfully!"
+                        ) : (
+                          "Send message"
+                        )}
+                        {!loading && !sent && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
                       </motion.button>
                     </div>
+                    {result && !sent && (
+                      <p className="mt-3 text-center text-xs font-semibold text-red-500">{result}</p>
+                    )}
                   </div>
                 </form>
               </div>

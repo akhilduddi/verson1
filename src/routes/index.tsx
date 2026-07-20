@@ -75,59 +75,6 @@ export default function Home() {
 
 function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const [trailCards, setTrailCards] = useState<any[]>([]);
-  const lastSpawn = useRef({ x: 0, y: 0 });
-  const cardIdCounter = useRef(0);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const dx = x - lastSpawn.current.x;
-    const dy = y - lastSpawn.current.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist > 150) {
-      lastSpawn.current = { x, y };
-      
-      const SHOWCASE_DATA = [
-        { title: "Pharma Analytics", desc: "Real-time dashboard" },
-        { title: "Clinical Trials", desc: "Phase III Monitoring" },
-        { title: "Drug Pipeline", desc: "Visualization" },
-        { title: "Market Analytics", desc: "Competitor Tracking" },
-        { title: "Regulatory Intel", desc: "FDA & EMA Updates" },
-        { title: "Data Engineering", desc: "ETL Workflow" },
-        { title: "Company Profile", desc: "Acquisition Target" },
-        { title: "cGxP Directory", desc: "Partner Search" },
-        { title: "cGxP Jobs", desc: "Data Scientist Role" },
-      ];
-      
-      const randomData = SHOWCASE_DATA[Math.floor(Math.random() * SHOWCASE_DATA.length)];
-      const rotate = Math.random() * 20 - 10;
-
-      const newCard = {
-        id: cardIdCounter.current++,
-        x,
-        y,
-        rotate,
-        ...randomData
-      };
-
-      setTrailCards(prev => {
-        const next = [...prev, newCard];
-        if (next.length > 8) {
-           return next.slice(next.length - 8);
-        }
-        return next;
-      });
-
-      setTimeout(() => {
-        setTrailCards(prev => prev.filter(c => c.id !== newCard.id));
-      }, 500);
-    }
-  };
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -138,7 +85,7 @@ function Hero() {
   const scaleText = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
   return (
-    <section ref={ref} className="relative overflow-hidden" onMouseMove={handleMouseMove}>
+    <section ref={ref} className="relative overflow-hidden">
       {/* gradient + grid background */}
       <motion.div style={{ y: yBg }} className="absolute inset-0 -z-10 bg-soft-radial" />
       <motion.div style={{ y: yBg }} className="bg-grid absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(70%_55%_at_50%_30%,black,transparent)]" />
@@ -156,8 +103,6 @@ function Hero() {
         transition={{ duration: 12, repeat: Infinity }}
       />
       
-      <CursorTrailCards cards={trailCards} />
-
       <motion.div style={{ opacity: opacityText, scale: scaleText }} className="relative z-10 mx-auto max-w-7xl px-6 pb-12 pt-14 sm:pt-20">
         <div 
           className="relative inline-block w-full max-w-4xl"
@@ -192,38 +137,6 @@ function Hero() {
         </Reveal>
       </motion.div>
     </section>
-  );
-}
-
-/* ---------------- HERO SHOWCASE CARDS (CURSOR TRAIL) ---------------- */
-function CursorTrailCards({ cards }: { cards: any[] }) {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden">
-      <AnimatePresence>
-        {cards.map((c) => (
-          <motion.div
-            key={c.id}
-            initial={{ opacity: 0, scale: 0.7, x: "-50%", y: "-50%" }}
-            animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%", rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: "-50%", y: "-50%", transition: { duration: 0.5, ease: "easeOut" } }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            style={{ 
-              top: c.y, 
-              left: c.x,
-            }}
-            className="absolute flex w-44 h-44 flex-col items-center justify-center gap-3 rounded-2xl border border-white/60 bg-white/50 p-4 text-center shadow-xl backdrop-blur-md will-change-transform"
-          >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-cyan-500/20 text-primary shadow-sm ring-1 ring-primary/20">
-              <Sparkles className="h-6 w-6" />
-            </div>
-            <div className="flex w-full min-w-0 flex-1 flex-col justify-center px-1">
-              <p className="w-full truncate text-sm font-bold text-foreground/90">{c.title}</p>
-              <p className="mt-0.5 w-full truncate text-[11px] text-muted-foreground">{c.desc}</p>
-            </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
   );
 }
 
@@ -512,7 +425,7 @@ function Products() {
 
   return (
     <section id="products" className="relative overflow-hidden bg-background">
-      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 relative z-10">
         <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
           <Reveal>
             <div className="text-xs font-bold uppercase tracking-widest text-primary mb-3">

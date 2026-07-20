@@ -189,10 +189,13 @@ function MegaPanel({ groupKey }: { groupKey: MegaKey }) {
                 to={`${g.base}/${it.slug}` as any}
                 className="group flex items-start gap-3 rounded-xl border border-transparent p-3 transition hover:border-border hover:bg-muted/50"
               >
-                <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 text-primary">
+                <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 text-primary shrink-0">
                   <Icon className="h-4 w-4" />
                 </div>
-                <div className="text-sm font-semibold text-foreground">{it.name}</div>
+                <div>
+                  <div className="text-sm font-semibold text-foreground">{it.name}</div>
+                  {it.blurb && <div className="text-[11px] text-muted-foreground/80 mt-0.5 leading-snug line-clamp-1">{it.blurb}</div>}
+                </div>
               </Link>
             </motion.div>
           );

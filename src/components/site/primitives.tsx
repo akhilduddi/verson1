@@ -4,6 +4,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import ctaBg from "@/assets/cta-background.png";
+import { CursorTrail } from "./CursorTrail";
 
 export function Section({
   children,
