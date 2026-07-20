@@ -30,8 +30,8 @@ function Contact() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
-                    { Icon: Mail, label: "Email", v: "hello@cgxp.tech" },
-                    { Icon: Phone, label: "Phone", v: "+1 (555) 010-2024" },
+                    { Icon: Mail, label: "Email", v: "info@cGxPTech.com" },
+                    { Icon: Phone, label: "Phone", v: "+1 (609) 778-0017" },
                   ].map(({ Icon, label, v }) => (
                     <div
                       key={label}
@@ -70,10 +70,8 @@ function Contact() {
                 
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
-                    { city: "San Francisco", region: "HQ - North America", desc: "100 Innovation Way, CA 94105" },
-                    { city: "London", region: "Europe Hub", desc: "15 King's Cross Road, N1C 4" },
-                    { city: "Singapore", region: "APAC Hub", desc: "8 Marina View, 018960" },
-                    { city: "Basel", region: "Pharma R&D Center", desc: "Novartis Campus Area, CH-4056" },
+                    { city: "New York/New Jersey", region: "HQ - North America", desc: "285 Durham Ave, South Plainfield, NJ 07080." },
+                    { city: "Hyderabad", region: "HQ - India", desc: "Madhapur, Hyderabad, TS, India 500081." },
                   ].map((office) => (
                     <div key={office.city} className="p-4 rounded-xl border border-border bg-background">
                       <div className="flex items-start gap-2">
